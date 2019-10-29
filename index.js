@@ -1,12 +1,11 @@
 const express = require("express");
-const PostDb = require("./posts/postDb");
-const UserDb = require("./users/userDb");
 const userRouter = require("./users/userRouter");
 const postRouter = require("./posts/postRouter");
 
 const port = 5000;
 const server = express();
 server.use(express.json());
+
 server.use("/user", userRouter);
 server.use("/post", postRouter);
 
@@ -23,6 +22,10 @@ const nameCheckMiddleware = (req, res, next) => {
     next();
   }
 };
+
+server.get("/", (req, res) => {
+  res.send("Welcome to HobbitBook");
+});
 
 server.listen(port, () => {
   console.log(`Server listening on ${port}`);

@@ -1,5 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const users = require("./userDb");
+
+function logger(req, res, next) {
+  console.log(`[${new Date().toISOString()}] ${req.method} to ${req.path}`);
+  next();
+}
 
 router.post("/", (req, res) => {
   const { name } = req.body;
@@ -15,7 +21,7 @@ router.post("/", (req, res) => {
 
 router.post("/:id/posts", (req, res) => {});
 
-router.get("/", (req, res) => {
+router.get("/", logger, (req, res) => {
   users
     .get()
     .then(foundUsers => {
