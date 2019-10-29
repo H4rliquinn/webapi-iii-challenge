@@ -94,11 +94,37 @@ router.put("/:id", (req, res) => {
 
 //custom middleware
 
-function validateUserId(req, res, next) {}
+function validateUserId(req, res, next) {
+  const { id } = req.params;
+  db.getById(id)
+    .then(users => {
+      users === undefined
+        ? res.status(400).json({ message: "user id not found" })
+        : (req.user = { id });
+    })
+    .catch(err =>
+      res.status(500).json({ message: "Server error retrieving id" })
+    );
+  next();
+}
 
-function validateUser(req, res, next) {}
+function validateUser(req, res, next) {
+  req.body ? null : res.status(400).json({ message: "missing user data" });
+  req.body.name
+    ? null
+    : res.status(400).json({ message: "missing required name field" });
+  next();
+}
 
-function validatePost(req, res, next) {}
+function validatePost(req, res, next) {
+  req.body
+    ? req.body.text
+      ? null
+      : res.status(400).json({ message: "missing required text field" })
+    : res.status(400).json({ message: "missing user data" });
+
+  next();
+}
 
 const nameCheckMiddleware = (req, res, next) => {
   const { name } = req.body;
