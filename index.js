@@ -6,6 +6,17 @@ const port = 5000;
 const server = express();
 server.use(express.json());
 
+const logger = (req, res, next) => {
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${
+      req.hostname
+    }`
+  );
+
+  next();
+};
+server.use(logger);
+
 server.use("/user", userRouter);
 server.use("/post", postRouter);
 
